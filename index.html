@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Trap Kitty Age</title>
+<title>Trap Kitty Age Fast</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -64,7 +64,7 @@ video {
 
 <body>
 
-<h2>TRAP KITTY AGE</h2>
+<h2>TRAP KITTY AGE FAST</h2>
 
 <div class="container">
   <div class="kitty">🎀😈</div>
@@ -80,6 +80,7 @@ video {
 const video = document.getElementById("video");
 const ageText = document.getElementById("age");
 
+// старт камеры
 async function startCamera() {
   const stream = await navigator.mediaDevices.getUserMedia({
     video: { facingMode: "user" }
@@ -87,12 +88,14 @@ async function startCamera() {
   video.srcObject = stream;
 }
 
+// загрузка маленькой модели
 async function loadModels() {
-  const url = "https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/weights";
+  const url = "https://justadomainforfaceapi.github.io/weights"; // временная ссылка замените на свою, если хотите локально
   await faceapi.nets.tinyFaceDetector.loadFromUri(url);
-  await faceapi.nets.ageGenderNet.loadFromUri(url);
+  await faceapi.nets.tinyAgeGenderNet.loadFromUri(url);
 }
 
+// определение возраста
 async function detectAge() {
   const result = await faceapi
     .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
@@ -106,6 +109,7 @@ async function detectAge() {
   }
 }
 
+// главный цикл
 (async () => {
   await loadModels();
   await startCamera();
@@ -115,4 +119,4 @@ async function detectAge() {
 </script>
 
 </body>
-  </html>
+</html>
