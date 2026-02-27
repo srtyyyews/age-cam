@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <title>Age Cam</title>
 
-  <!-- face-api -->
-  <script defer src="https://unpkg.com/face-api.js"></script>
+  <!-- face-api (СТАБИЛЬНО) -->
+  <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
 
   <style>
     body {
@@ -14,18 +14,11 @@
       font-family: Arial, sans-serif;
       text-align: center;
       color: #fff;
-      overflow: hidden;
     }
 
     h1 {
       margin-top: 10px;
       text-shadow: 0 0 10px #ff69b4;
-      animation: glow 2s infinite alternate;
-    }
-
-    @keyframes glow {
-      from { text-shadow: 0 0 5px #ff69b4; }
-      to { text-shadow: 0 0 20px #ff1493; }
     }
 
     video {
@@ -33,23 +26,17 @@
       width: 85%;
       max-width: 320px;
       border-radius: 20px;
-      box-shadow: 0 0 25px rgba(255, 105, 180, 0.8);
+      background: #000;
+      box-shadow: 0 0 25px rgba(255,105,180,0.8);
     }
 
     #age {
       margin-top: 15px;
-      font-size: 26px;
-      background: rgba(255, 105, 180, 0.6);
+      font-size: 24px;
+      background: rgba(255,105,180,0.6);
       display: inline-block;
       padding: 10px 20px;
       border-radius: 30px;
-      animation: pulse 1.5s infinite;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
     }
 
     #trappa {
@@ -58,13 +45,6 @@
       right: 0;
       width: 120px;
       opacity: 0.85;
-      animation: float 3s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-      100% { transform: translateY(0); }
     }
   </style>
 </head>
@@ -75,7 +55,7 @@
 
   <video id="video" autoplay muted playsinline></video>
 
-  <div id="age">loading...</div>
+  <div id="age">loading models...</div>
 
   <img id="trappa" src="trappa.png" alt="Yung Trappa" />
 
@@ -91,6 +71,7 @@
     }
 
     async function loadModels() {
+      await faceapi.tf.ready(); // 🔴 КЛЮЧЕВО
       await faceapi.nets.tinyFaceDetector.loadFromUri("./");
       await faceapi.nets.tinyAgeGenderNet.loadFromUri("./");
     }
@@ -111,10 +92,9 @@
     }
 
     async function init() {
-      ageDiv.innerText = "loading models...";
       await loadModels();
       await startCamera();
-      ageDiv.innerText = "looking at you 👀";
+      ageDiv.innerText = "смотрю 👀";
       detectAge();
     }
 
